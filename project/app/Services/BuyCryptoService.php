@@ -115,7 +115,7 @@ class BuyCryptoService
     public function chart($coin)
     {
         $coin = strtolower($coin);
-        $file = file_get_contents(storage_path("app/year_chart_$coin.json"));
+        $file = file_get_contents(resource_path("chart/year_chart_$coin.json"));
         $data = json_decode($file);
 
         $purchases = CryptoPayment::query()->where('currency', $coin)->get();
