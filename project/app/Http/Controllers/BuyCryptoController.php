@@ -26,7 +26,7 @@ class BuyCryptoController extends Controller
     {
         $sumRub = $this->service->getSumRub();
         $currentSumUsdt = $this->service->getCurrentSumPortfolioUsdt();
-        $currentSumRub = round($currentSumUsdt * 94.5, 2);
+        $currentSumRub = round($currentSumUsdt * $this->service->getCourseFromCache(BuyCryptoService::DEFAULT_CURRENCY), 2);
 
         return new JsonResponse([
             'sum' => $sumRub,

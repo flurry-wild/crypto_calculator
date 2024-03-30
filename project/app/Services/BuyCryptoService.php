@@ -34,14 +34,14 @@ class BuyCryptoService
         ];
     }
 
-    private function getCourseFromCache($coin)
+    public function getCourseFromCache($coin)
     {
         $course = Cache::get($coin);
 
         if ($course) {
             return floatval($course);
         } else {
-            Cache::put($coin, $this->getCourse($coin), 60*3);
+            Cache::put($coin, $this->getCourse($coin), 60*10);
 
             return floatval(Cache::get($coin));
         }
