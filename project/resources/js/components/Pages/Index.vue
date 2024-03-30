@@ -1,0 +1,194 @@
+<template>
+    <h1>Калькулятор криптоинвестиций</h1>
+
+    <div>Зафиксировать перевод
+        <InputNumber v-model="sumRub" mode="currency" currency="RUB" locale="ru-RU"/>
+        по курсу <b>USDT$ </b>
+          <InputNumber v-model="course" mode="currency" currency="RUB" locale="ru-RU" :max="200"/>
+        <Button class="m-2" @click.prevent="buyForFiat">Зафиксировать</Button>
+    </div>
+    <br>
+
+    <div>Инвестировано в рублях: <b>{{ allSum }}</b></div>
+    <div>Инвестировано в USDT$: <b>{{ allSumUsdt }}</b></div>
+    <br>
+    <br>
+    <br>
+
+    <div>Зафиксировать покупку <br><br>
+        <SelectButton v-model="selectedCoin" :options="cryptoCoins" aria-labelledby="basic" @click="selectCrypto"/>
+        <br>
+        на сумму <InputNumber v-model="usdtAmount" prefix="USDT$  "/>
+         по курсу
+        <InputNumber v-model="selectedCoinCourse" prefix="USDT$  "  :maxFractionDigits="4"/>
+        <br>
+        <br>
+        <FloatLabel>
+            <Calendar v-model="purchaseDate" inputId="purchase_date" dateFormat="yy-mm-dd" hourFormat="24"/>
+            <label for="purchase_date"> Дата покупки</label>
+        </FloatLabel>
+        <Button class="m-2" @click.prevent="buyCrypto">Зафиксировать</Button>
+    </div>
+
+    <br>
+    <br>
+
+    <div>Покупки криптовалюты</div>
+    <DataTable :value="purchases" tableStyle="min-width: 50rem">
+        <Column field="currency" header="Актив"></Column>
+        <Column field="course" header="Курс"></Column>
+        <Column field="sum_in_currency" header="Сумма"></Column>
+        <Column field="purchase_date" header="Дата покупки"></Column>
+    </DataTable>
+
+    <canvas></canvas>
+
+    <h2>Результат</h2>
+    <br>
+    <div>
+        <div>Текущая сумма в USDT: <b>{{ currentSumUsdt }}</b></div>
+        <div>Текущая сумма в рублях: <b>{{ currentSumRub }}</b></div>
+        <br>
+        <div>Общая доходность: <b>{{ profitability }}%</b></div>
+
+    </div>
+</template>
+
+<script>
+import axios from 'axios';
+import Chart from 'chart.js/auto';
+
+export default {
+    name: "Index",
+
+    data() {
+        return {
+            sumRub: 10000,
+            course: 94.5,
+            allSum: 0,
+            allSumUsdt: 0,
+            chart: null,
+            selectedCoin: 'WBTC',
+            cryptoCoins: [],
+            usdtAmount: 100,
+            selectedCoinCourse: null,
+            coinCourses: null,
+            purchases: [],
+            purchaseDate: null,
+            currentSumUsdt: 0,
+            currentSumRub: 0,
+            profitability: 0
+        }
+    },
+    mounted() {
+        this.getSum();
+        this.getCoins();
+        this.getCoinPurchases();
+        this.createLineChart(this.selectedCoin);
+    },
+    computed: {
+
+    },
+    methods: {
+        buyForFiat() {
+            axios.post('/fiat_payments/buy_for_fiat', {sum: this.sumRub, course: this.course});
+            this.getSum();
+        },
+        getSum() {
+            axios.get('/fiat_payments/get_sum').then(res => {
+                this.allSum = res.data.sum;
+                this.allSumUsdt = res.data.sumUsdt;
+                this.currentSumUsdt = res.data.currentSumUsdt;
+                this.currentSumRub = res.data.currentSumRub;
+                this.profitability = res.data.profitability;
+            });
+        },
+        getCoinPurchases() {
+            axios.get('/crypto_payments/purchases/'+this.selectedCoin).then(res => {
+                this.purchases = res.data.purchases;
+            });
+        },
+        getCoins() {
+            axios.get('/fiat_payments/get_crypto_coins').then(res => {
+
+                this.cryptoCoins = Object.keys(res.data.cryptoCoins);
+
+                this.coinCourses = res.data.cryptoCoins;
+                this.selectedCoinCourse = this.coinCourses[this.selectedCoin];
+                console.log(this.coinCourses);
+
+            });
+        },
+        selectCrypto(event) {
+            this.selectedCoinCourse = this.coinCourses[this.selectedCoin];
+            this.getCoinPurchases(this.selectedCoin);
+            this.createLineChart(this.selectedCoin);
+        },
+        twoDigits(num) {
+            return ('0' + num).slice(-2);
+        },
+        buyCrypto() {
+            let d = new Date(this.purchaseDate);
+            //is primevue calendar bag (month +1)
+            let date = d.getFullYear() + '-' + this.twoDigits(d.getMonth()+1) + '-' + this.twoDigits(d.getDate());
+            console.log(date);
+
+            axios.post('crypto_payments/buy_crypto', {
+                sum: this.usdtAmount,
+                course: this.selectedCoinCourse,
+                currency: this.selectedCoin,
+                purchase_date: date
+            });
+        },
+        async createLineChart(coin) {
+            if (this.chart) {
+                this.chart.destroy();
+            }
+
+            let response = await axios.get('crypto_payments/chart/'+coin);
+            let responseData = response.data;
+            let xData = responseData.times;
+            let yData = responseData.values;
+            let types = responseData.types;
+
+            let canvas = window.document.querySelector('canvas');
+            let context = canvas.getContext('2d');
+
+            console.log(xData.length);
+
+            let pointColors = [];
+            types.forEach((item) => {
+                if (item == 'default') {
+                    pointColors.push('#ffff00');
+                } else {
+                    pointColors.push('#000000');
+                }
+            });
+
+            let data = {
+                labels: xData,
+                datasets: [{
+                    data: yData,
+                    borderColor: pointColors,
+                },]
+            }
+
+            let config = {
+                type: 'line',
+                data: data,
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: this.selectedCoin
+                        }
+                    },
+                },
+            }
+
+            Chart.defaults.plugins.legend.display = false;
+            this.chart = new Chart(context, config);
+        },
+    }
+}
+</script>
