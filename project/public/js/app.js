@@ -18165,7 +18165,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       sumRub: 10000,
-      course: 94.5,
+      course: 0,
       allSum: 0,
       allSumUsdt: 0,
       chart: null,
@@ -18214,11 +18214,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     getCoins: function getCoins() {
       var _this3 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get('/fiat_payments/get_crypto_coins').then(function (res) {
-        _this3.cryptoCoins = Object.keys(res.data.cryptoCoins);
-        _this3.coinCourses = res.data.cryptoCoins;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get('/fiat_payments/courses').then(function (res) {
+        _this3.cryptoCoins = Object.keys(res.data.data.cryptoCoins);
+        _this3.coinCourses = res.data.data.cryptoCoins;
         _this3.selectedCoinCourse = _this3.coinCourses[_this3.selectedCoin];
         console.log(_this3.coinCourses);
+        _this3.course = res.data.data.USDT;
       });
     },
     selectCrypto: function selectCrypto(event) {
@@ -18372,8 +18373,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     mode: "currency",
     currency: "RUB",
-    locale: "ru-RU",
-    max: 200
+    locale: "ru-RU"
   }, null, 8 /* PROPS */, ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
     "class": "m-2",
     onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($options.buyForFiat, ["prevent"])

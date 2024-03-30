@@ -47,9 +47,9 @@ class BuyCryptoController extends Controller
         $this->service->buyCrypto($request->validated());
     }
 
-    public function getCryptoCoins()
+    public function courses()
     {
-        return new JsonResponse(['cryptoCoins' => $this->service->getCryptoCoins()]);
+        return new JsonResponse(['data' => $this->service->courses()]);
     }
 
     public function purchases(string $coin)

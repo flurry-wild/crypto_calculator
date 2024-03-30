@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Courses\CryptoCourse;
+use App\Courses\FiatCourse;
 use App\Http\Clients\OkxClient;
 use App\Models\CryptoPayment;
 use App\Models\FiatPayment;
@@ -18,13 +20,17 @@ class BuyCryptoService
 
     const CRYPTO_COINS = [self::WBTC, self::BNB, self::MATIC, self::USDC];
 
-    public function getCryptoCoins()
+    public function courses()
     {
         return [
-            static::WBTC => $this->getCourseFromCache(static::WBTC),
-            static::BNB => $this->getCourseFromCache(static::BNB),
-            static::MATIC => $this->getCourseFromCache(static::MATIC),
-            static::USDC => $this->getCourseFromCache(static::USDC)
+            'cryptoCoins' => [
+                static::WBTC => $this->getCourseFromCache(static::WBTC),
+                static::BNB => $this->getCourseFromCache(static::BNB),
+                static::MATIC => $this->getCourseFromCache(static::MATIC),
+                static::USDC => $this->getCourseFromCache(static::USDC),
+            ],
+
+            static::DEFAULT_CURRENCY => $this->getCourseFromCache(static::DEFAULT_CURRENCY)
         ];
     }
 
@@ -80,9 +86,13 @@ class BuyCryptoService
 
     public function getCourse($coin)
     {
-        $client = app(OkxClient::class);
+        if ($coin === static::DEFAULT_CURRENCY) {
+            $course = new FiatCourse();
+        } else {
+            $course = new CryptoCourse();
+        }
 
-        return $client->getCourse($coin);
+        return $course->getCourse($coin);
     }
 
     public function getCurrentSumPortfolioUsdt()

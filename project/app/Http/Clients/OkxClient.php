@@ -31,4 +31,15 @@ class OkxClient
 
         return floatval($course);
     }
+
+    public function getUsdtRubCourse()
+    {
+        $url = 'https://www.okx.com/priapi/v5/market/currency-trend?baseCcy=USDT&quoteCcy=RUB&isPremium=false&bar=1m&limit=1';
+
+        $response = Http::get($url)->json();
+
+        $course = $response['data'][0][1];
+
+        return floatval($course);
+    }
 }

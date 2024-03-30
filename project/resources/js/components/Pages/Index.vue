@@ -4,7 +4,7 @@
     <div>Зафиксировать перевод
         <InputNumber v-model="sumRub" mode="currency" currency="RUB" locale="ru-RU"/>
         по курсу <b>USDT$ </b>
-          <InputNumber v-model="course" mode="currency" currency="RUB" locale="ru-RU" :max="200"/>
+          <InputNumber v-model="course" mode="currency" currency="RUB" locale="ru-RU"/>
         <Button class="m-2" @click.prevent="buyForFiat">Зафиксировать</Button>
     </div>
     <br>
@@ -64,7 +64,7 @@ export default {
     data() {
         return {
             sumRub: 10000,
-            course: 94.5,
+            course: 0,
             allSum: 0,
             allSumUsdt: 0,
             chart: null,
@@ -109,14 +109,15 @@ export default {
             });
         },
         getCoins() {
-            axios.get('/fiat_payments/get_crypto_coins').then(res => {
+            axios.get('/fiat_payments/courses').then(res => {
 
-                this.cryptoCoins = Object.keys(res.data.cryptoCoins);
+                this.cryptoCoins = Object.keys(res.data.data.cryptoCoins);
 
-                this.coinCourses = res.data.cryptoCoins;
+                this.coinCourses = res.data.data.cryptoCoins;
                 this.selectedCoinCourse = this.coinCourses[this.selectedCoin];
                 console.log(this.coinCourses);
 
+                this.course = res.data.data.USDT;
             });
         },
         selectCrypto(event) {
