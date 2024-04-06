@@ -128,17 +128,27 @@ class BuyCryptoService
         $file = file_get_contents(resource_path("chart/year_chart_$coin.json"));
         $data = json_decode($file);
 
-        $purchases = CryptoPayment::query()->where('currency', $coin)->get();
+        $deals = CryptoPayment::query()->where('currency', $coin)->get();
         $candles = $data->candles;
 
         $points = [];
-        foreach ($purchases as $purchase) {
-            $purchaseTimestamp = strtotime($purchase->purchase_date . ' 00:00:00');
+        foreach ($deals as $deal) {
+            $purchaseTimestamp = strtotime($deal->purchase_date . ' 00:00:00');
             $points[] = [
                 'timestamp' => $purchaseTimestamp,
-                'value' => $purchase->course,
+                'value' => $deal->course,
                 'type' => 'buy',
                 'time' => date('Y-m-d', $purchaseTimestamp)
+            ];
+        }
+
+        foreach ($deals as $deal) {
+            $saleTimestamp = strtotime($deal->sale_date . ' 00:00:00');
+            $points[] = [
+                'timestamp' => $saleTimestamp,
+                'value' => $deal->course,
+                'type' => 'sale',
+                'time' => date('Y-m-d', $saleTimestamp)
             ];
         }
 

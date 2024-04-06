@@ -18267,8 +18267,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               types.forEach(function (item) {
                 if (item == 'default') {
                   pointColors.push('#ffff00');
-                } else {
+                } else if (item == 'buy') {
                   pointColors.push('#000000');
+                } else {
+                  pointColors.push('#ff0000');
                 }
               });
               data = {
@@ -18441,6 +18443,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
         field: "purchase_date",
         header: "Дата покупки"
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+        field: "sale_date",
+        header: "Дата продажи"
       })];
     }),
     _: 1 /* STABLE */

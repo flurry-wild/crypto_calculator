@@ -39,6 +39,7 @@
         <Column field="course" header="Курс"></Column>
         <Column field="sum_in_currency" header="Сумма"></Column>
         <Column field="purchase_date" header="Дата покупки"></Column>
+        <Column field="sale_date" header="Дата продажи"></Column>
     </DataTable>
 
     <canvas></canvas>
@@ -161,8 +162,10 @@ export default {
             types.forEach((item) => {
                 if (item == 'default') {
                     pointColors.push('#ffff00');
-                } else {
+                } else if (item == 'buy') {
                     pointColors.push('#000000');
+                } else {
+                    pointColors.push('#ff0000');
                 }
             });
 
