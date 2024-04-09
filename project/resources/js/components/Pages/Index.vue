@@ -39,7 +39,12 @@
         <Column field="course" header="Курс"></Column>
         <Column field="sum_in_currency" header="Сумма"></Column>
         <Column field="purchase_date" header="Дата покупки"></Column>
-        <Column field="sale_date" header="Дата продажи"></Column>
+        <Column field="sell_date" header="Дата продажи"></Column>
+        <Column>
+            <template #body="{ data }">
+                <Button label="Зафиксировать продажу" @click="dialogVisible = true" :class="saleImpossible(data)"/>
+            </template>
+        </Column>
     </DataTable>
 
     <canvas></canvas>
@@ -53,6 +58,17 @@
         <div>Общая доходность: <b>{{ profitability }}%</b></div>
 
     </div>
+
+    <Dialog v-model:visible="dialogVisible" modal header="Зафиксировать продажу актива" :style="{ width: '25rem' }">
+        <InputNumber v-model="this.coinCourses[this.dialogDeal.currency]" prefix="USDT$  " :maxFractionDigits="4"/>
+        <br>
+        <br>
+        <FloatLabel>
+            <Calendar v-model="sellDate" inputId="sell_date" dateFormat="yy-mm-dd" hourFormat="24"/>
+            <label for="sell_date">Дата продажи</label>
+        </FloatLabel>
+        <Button class="m-2" @click.prevent="recordTheSale">Зафиксировать</Button>
+    </Dialog>
 </template>
 
 <script>
@@ -78,7 +94,11 @@ export default {
             purchaseDate: null,
             currentSumUsdt: 0,
             currentSumRub: 0,
-            profitability: 0
+            profitability: 0,
+            dialogVisible: false,
+            sellDate: null,
+            disabled: '',
+            dialogDeal: null
         }
     },
     mounted() {
@@ -128,6 +148,11 @@ export default {
         },
         twoDigits(num) {
             return ('0' + num).slice(-2);
+        },
+        convertDate(date) {
+            let d = new Date(date);
+            //is primevue calendar bag (month +1)
+            return d.getFullYear() + '-' + this.twoDigits(d.getMonth()+1) + '-' + this.twoDigits(d.getDate());
         },
         buyCrypto() {
             let d = new Date(this.purchaseDate);
@@ -193,6 +218,25 @@ export default {
             Chart.defaults.plugins.legend.display = false;
             this.chart = new Chart(context, config);
         },
+        async recordTheSale() {
+            let response = await axios.patch('crypto_payments/sell_crypto/'+this.dialogDeal.id, {
+                sell_course: this.coinCourses[this.dialogDeal.currency],
+                sell_date: this.convertDate(this.sellDate)
+            });
+
+            location.reload();
+        },
+        saleImpossible(data) {
+            console.log(data);
+
+            this.dialogDeal = data;
+
+            if (data.sell_date == null) {
+                return '';
+            }
+
+            return 'p-disabled'
+        }
     }
 }
 </script>

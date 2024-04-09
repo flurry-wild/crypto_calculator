@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BuyCryptoRequest;
 use App\Http\Requests\BuyUsdtRequest;
+use App\Http\Requests\SellCryptoRequest;
 use App\Services\BuyCryptoService;
 use Illuminate\Http\JsonResponse;
 
@@ -45,6 +46,11 @@ class BuyCryptoController extends Controller
     public function buyCrypto(BuyCryptoRequest $request)
     {
         $this->service->buyCrypto($request->validated());
+    }
+
+    public function sellCrypto(int $id, SellCryptoRequest $request)
+    {
+        $this->service->sellCrypto($id, $request->validated());
     }
 
     public function courses()

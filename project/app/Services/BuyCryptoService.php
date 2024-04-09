@@ -62,6 +62,13 @@ class BuyCryptoService
         CryptoPayment::create($params);
     }
 
+    public function sellCrypto(int $id, array $params)
+    {
+        $deal = CryptoPayment::find($id);
+
+        $deal->update($params);
+    }
+
     public function getSumRub()
     {
         return FiatPayment::query()->where('currency', static::DEFAULT_CURRENCY)
@@ -147,7 +154,7 @@ class BuyCryptoService
             $points[] = [
                 'timestamp' => $saleTimestamp,
                 'value' => $deal->course,
-                'type' => 'sale',
+                'type' => 'sell',
                 'time' => date('Y-m-d', $saleTimestamp)
             ];
         }

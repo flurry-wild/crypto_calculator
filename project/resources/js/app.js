@@ -14,6 +14,8 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Calendar from 'primevue/calendar';
 import FloatLabel from 'primevue/floatlabel';
+import Dialog from 'primevue/dialog';
+
 
 import 'bootstrap';
 import 'primevue/resources/themes/md-light-indigo/theme.css';
@@ -29,6 +31,7 @@ main.component('DataTable', DataTable);
 main.component('Column', Column);
 main.component('Calendar', Calendar);
 main.component('FloatLabel', FloatLabel);
+main.component('Dialog', Dialog);
 
 main.use(store);
 main.use(router);

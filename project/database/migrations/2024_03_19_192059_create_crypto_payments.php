@@ -20,7 +20,8 @@ class CreateCryptoPayments extends Migration
             $table->string('currency');
             $table->float('course');
             $table->date('purchase_date');
-            $table->date('sale_date')->nullable();
+            $table->date('sell_date')->nullable();
+            $table->float('sell_course')->nullable();
             $table->timestamps();
         });
     }
