@@ -53,6 +53,11 @@ class BuyCryptoController extends Controller
         $this->service->sellCrypto($id, $request->validated());
     }
 
+    public function delete(int $id)
+    {
+        $this->service->delete($id);
+    }
+
     public function courses()
     {
         return new JsonResponse(['data' => $this->service->courses()]);

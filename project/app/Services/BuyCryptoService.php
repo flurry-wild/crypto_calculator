@@ -102,6 +102,11 @@ class BuyCryptoService
         return $course->getCourse($coin);
     }
 
+    public function delete(int $id)
+    {
+        return CryptoPayment::find($id)->delete();
+    }
+
     public function getCurrentSumPortfolioUsdt()
     {
         $purchases = $this->getPurchases();

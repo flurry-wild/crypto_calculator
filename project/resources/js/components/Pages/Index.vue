@@ -28,6 +28,7 @@
             <label for="purchase_date"> Дата покупки</label>
         </FloatLabel>
         <Button class="m-2" @click.prevent="buyCrypto">Зафиксировать</Button>
+        <Button class="m-2" @click.prevent="deleteCrypto">Удалить сделку</Button>
     </div>
 
     <br>
@@ -43,6 +44,11 @@
         <Column>
             <template #body="{ data }">
                 <Button label="Зафиксировать продажу" @click="dialogVisible = true" :class="saleImpossible(data)"/>
+            </template>
+        </Column>
+        <Column>
+            <template #body="{ data }">
+                <Button label="Удалить сделку" @click="deleteCrypto(data.id)"/>
             </template>
         </Column>
     </DataTable>
@@ -161,6 +167,11 @@ export default {
                 currency: this.selectedCoin,
                 purchase_date: this.convertDate(this.purchaseDate)
             });
+        },
+        deleteCrypto(id) {
+            axios.delete('crypto_payments/'+id);
+
+            location.reload();
         },
         async createLineChart(coin) {
             if (this.chart) {
