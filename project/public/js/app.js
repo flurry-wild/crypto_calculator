@@ -18240,10 +18240,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return d.getFullYear() + '-' + this.twoDigits(d.getMonth() + 1) + '-' + this.twoDigits(d.getDate());
     },
     buyCrypto: function buyCrypto() {
-      var d = new Date(this.purchaseDate);
-      //is primevue calendar bag (month +1)
-      var date = d.getFullYear() + '-' + this.twoDigits(d.getMonth() + 1) + '-' + this.twoDigits(d.getDate());
-      console.log(date);
+      var date = this.convertDate(this.purchaseDate);
       axios__WEBPACK_IMPORTED_MODULE_0___default().post('crypto_payments/buy_crypto', {
         sum: this.usdtAmount,
         course: this.selectedCoinCourse,

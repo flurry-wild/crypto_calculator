@@ -155,16 +155,11 @@ export default {
             return d.getFullYear() + '-' + this.twoDigits(d.getMonth()+1) + '-' + this.twoDigits(d.getDate());
         },
         buyCrypto() {
-            let d = new Date(this.purchaseDate);
-            //is primevue calendar bag (month +1)
-            let date = d.getFullYear() + '-' + this.twoDigits(d.getMonth()+1) + '-' + this.twoDigits(d.getDate());
-            console.log(date);
-
             axios.post('crypto_payments/buy_crypto', {
                 sum: this.usdtAmount,
                 course: this.selectedCoinCourse,
                 currency: this.selectedCoin,
-                purchase_date: date
+                purchase_date: this.convertDate(this.purchaseDate)
             });
         },
         async createLineChart(coin) {
@@ -219,7 +214,7 @@ export default {
             this.chart = new Chart(context, config);
         },
         async recordTheSale() {
-            let response = await axios.patch('crypto_payments/sell_crypto/'+this.dialogDeal.id, {
+            await axios.patch('crypto_payments/sell_crypto/'+this.dialogDeal.id, {
                 sell_course: this.coinCourses[this.dialogDeal.currency],
                 sell_date: this.convertDate(this.sellDate)
             });
@@ -227,8 +222,6 @@ export default {
             location.reload();
         },
         saleImpossible(data) {
-            console.log(data);
-
             this.dialogDeal = data;
 
             if (data.sell_date == null) {
