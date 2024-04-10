@@ -155,13 +155,15 @@ class BuyCryptoService
         }
 
         foreach ($deals as $deal) {
-            $saleTimestamp = strtotime($deal->sale_date . ' 00:00:00');
-            $points[] = [
-                'timestamp' => $saleTimestamp,
-                'value' => $deal->course,
-                'type' => 'sell',
-                'time' => date('Y-m-d', $saleTimestamp)
-            ];
+            if (!empty($deal->sell_date)) {
+                $saleTimestamp = strtotime($deal->sell_date . ' 00:00:00');
+                $points[] = [
+                    'timestamp' => $saleTimestamp,
+                    'value' => $deal->course,
+                    'type' => 'sell',
+                    'time' => date('Y-m-d', $saleTimestamp)
+                ];
+            }
         }
 
         foreach ($candles as $item) {

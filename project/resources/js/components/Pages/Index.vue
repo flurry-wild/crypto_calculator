@@ -28,7 +28,6 @@
             <label for="purchase_date"> Дата покупки</label>
         </FloatLabel>
         <Button class="m-2" @click.prevent="buyCrypto">Зафиксировать</Button>
-        <Button class="m-2" @click.prevent="deleteCrypto">Удалить сделку</Button>
     </div>
 
     <br>

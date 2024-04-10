@@ -55,7 +55,7 @@ class BuyCryptoController extends Controller
 
     public function delete(int $id)
     {
-        $this->service->delete($id);
+        return new JsonResponse($this->service->delete($id));
     }
 
     public function courses()
