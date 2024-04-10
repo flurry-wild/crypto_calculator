@@ -18199,6 +18199,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         course: this.course
       });
       this.getSum();
+      location.reload();
     },
     getSum: function getSum() {
       var _this = this;
@@ -18246,6 +18247,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         currency: this.selectedCoin,
         purchase_date: this.convertDate(this.purchaseDate)
       });
+      location.reload();
     },
     deleteCrypto: function deleteCrypto(id) {
       axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]('crypto_payments/' + id);

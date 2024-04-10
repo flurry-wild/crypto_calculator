@@ -119,6 +119,8 @@ export default {
         buyForFiat() {
             axios.post('/fiat_payments/buy_for_fiat', {sum: this.sumRub, course: this.course});
             this.getSum();
+
+            location.reload();
         },
         getSum() {
             axios.get('/fiat_payments/get_sum').then(res => {
@@ -166,6 +168,8 @@ export default {
                 currency: this.selectedCoin,
                 purchase_date: this.convertDate(this.purchaseDate)
             });
+
+            location.reload();
         },
         deleteCrypto(id) {
             axios.delete('crypto_payments/'+id);
