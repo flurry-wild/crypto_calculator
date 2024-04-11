@@ -40,6 +40,7 @@
         <Column field="sum_in_currency" header="Сумма"></Column>
         <Column field="purchase_date" header="Дата покупки"></Column>
         <Column field="sell_date" header="Дата продажи"></Column>
+        <Column field="sell_course" header="Курс продажи"></Column>
         <Column>
             <template #body="{ data }">
                 <Button label="Зафиксировать продажу" @click="dialogVisible = true" :class="saleImpossible(data)"/>

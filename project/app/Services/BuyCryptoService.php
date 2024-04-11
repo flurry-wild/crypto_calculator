@@ -159,7 +159,7 @@ class BuyCryptoService
                 $saleTimestamp = strtotime($deal->sell_date . ' 00:00:00');
                 $points[] = [
                     'timestamp' => $saleTimestamp,
-                    'value' => $deal->course,
+                    'value' => $deal->sell_course,
                     'type' => 'sell',
                     'time' => date('Y-m-d', $saleTimestamp)
                 ];

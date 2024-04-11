@@ -18492,6 +18492,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
         field: "sell_date",
         header: "Дата продажи"
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+        field: "sell_course",
+        header: "Курс продажи"
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, null, {
         body: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function (_ref) {
           var data = _ref.data;
