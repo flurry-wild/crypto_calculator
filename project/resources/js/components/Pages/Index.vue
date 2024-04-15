@@ -187,7 +187,7 @@ export default {
             return d.getFullYear() + '-' + this.twoDigits(d.getMonth()+1) + '-' + this.twoDigits(d.getDate());
         },
         buyCrypto() {
-            axios.post('crypto_payments/buy_crypto', {
+            axios.post('crypto_payments', {
                 sum: this.usdtAmount,
                 course: this.selectedCoinCourse,
                 currency: this.selectedCoin,
@@ -253,7 +253,7 @@ export default {
             this.chart = new Chart(context, config);
         },
         async recordTheSale() {
-            await axios.patch('crypto_payments/sell_crypto/'+this.dialogDeal.id, {
+            await axios.patch('crypto_payments/'+this.dialogDeal.id, {
                 sell_course: this.coinCourses[this.dialogDeal.currency],
                 sell_date: this.convertDate(this.sellDate)
             });

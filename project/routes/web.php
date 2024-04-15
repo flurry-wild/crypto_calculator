@@ -19,8 +19,8 @@ Route::delete('fiat_payments/{id}', [\App\Http\Controllers\FiatPaymentController
 Route::get('fiat_payments/get_sum', [\App\Http\Controllers\BuyCryptoController::class, 'getSum']);
 Route::post('fiat_payments', [\App\Http\Controllers\FiatPaymentController::class, 'create']);
 Route::get('fiat_payments/courses', [\App\Http\Controllers\BuyCryptoController::class, 'courses']);
-Route::post('crypto_payments/buy_crypto', [\App\Http\Controllers\BuyCryptoController::class, 'buyCrypto']);
-Route::patch('crypto_payments/sell_crypto/{id}', [\App\Http\Controllers\BuyCryptoController::class, 'sellCrypto']);
+Route::post('crypto_payments', [\App\Http\Controllers\BuyCryptoController::class, 'create']);
+Route::patch('crypto_payments/{id}', [\App\Http\Controllers\BuyCryptoController::class, 'update']);
 Route::delete('crypto_payments/{id}', [\App\Http\Controllers\BuyCryptoController::class, 'delete']);
 Route::get('crypto_payments/purchases', [\App\Http\Controllers\BuyCryptoController::class, 'purchases']);
 Route::get('crypto_payments/chart/{coin}', [\App\Http\Controllers\BuyCryptoController::class, 'chart']);

@@ -47,14 +47,14 @@ class BuyCryptoService
         }
     }
 
-    public function buyCrypto(array $params)
+    public function create(array $params)
     {
         $params['sum_in_currency'] = $params['sum'] / $params['course'];
 
         CryptoPayment::create($params);
     }
 
-    public function sellCrypto(int $id, array $params)
+    public function update(int $id, array $params)
     {
         $deal = CryptoPayment::find($id);
 

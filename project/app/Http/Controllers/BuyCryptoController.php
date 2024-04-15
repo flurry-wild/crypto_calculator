@@ -37,12 +37,12 @@ class BuyCryptoController extends Controller
         ]);
     }
 
-    public function buyCrypto(BuyCryptoRequest $request)
+    public function create(BuyCryptoRequest $request)
     {
-        $this->service->buyCrypto($request->validated());
+        $this->service->create($request->validated());
     }
 
-    public function sellCrypto(int $id, SellCryptoRequest $request)
+    public function update(int $id, SellCryptoRequest $request)
     {
         $this->service->sellCrypto($id, $request->validated());
     }
