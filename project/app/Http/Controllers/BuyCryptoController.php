@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BuyCryptoRequest;
-use App\Http\Requests\BuyUsdtRequest;
 use App\Http\Requests\SellCryptoRequest;
 use App\Services\BuyCryptoService;
 use Illuminate\Http\JsonResponse;
@@ -36,11 +35,6 @@ class BuyCryptoController extends Controller
             'currentSumRub' => $currentSumRub,
             'profitability' => $this->service->getProfitability($currentSumRub, $sumRub)
         ]);
-    }
-
-    public function buyForFiat(BuyUsdtRequest $request)
-    {
-        $this->service->buyUsdt($request->validated());
     }
 
     public function buyCrypto(BuyCryptoRequest $request)

@@ -7,10 +7,20 @@ use App\Models\FiatPayment;
 
 class FiatPaymentService
 {
+    const DEFAULT_CURRENCY = 'USDT';
+
     public function getSumUsdt()
     {
-        return round(FiatPayment::query()->where('currency', BuyCryptoService::DEFAULT_CURRENCY)
+        return round(FiatPayment::query()->where('currency', static::DEFAULT_CURRENCY)
             ->sum('sum_in_currency'), 2);
+    }
+
+    public function create(array $params)
+    {
+        $params['currency'] = static::DEFAULT_CURRENCY;
+        $params['sum_in_currency'] = $params['sum'] / $params['course'];
+
+        FiatPayment::create($params);
     }
 
     public function index()

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BuyUsdtRequest;
 use App\Services\FiatPaymentService;
 use Illuminate\Http\JsonResponse;
 
@@ -13,6 +14,11 @@ class FiatPaymentController extends Controller
     public function __construct()
     {
         $this->service = app(FiatPaymentService::class);
+    }
+
+    public function create(BuyUsdtRequest $request)
+    {
+        $this->service->create($request->validated());
     }
 
     public function index()

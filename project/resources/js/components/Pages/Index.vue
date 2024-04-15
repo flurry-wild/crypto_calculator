@@ -132,7 +132,7 @@ export default {
     },
     methods: {
         async getFiatPayments() {
-            axios.get('/fiat_payments/index').then(res => {
+            axios.get('/fiat_payments').then(res => {
                 this.fiatPayments = res.data.data;
             });
         },
@@ -142,7 +142,7 @@ export default {
             location.reload();
         },
         buyForFiat() {
-            axios.post('/fiat_payments/buy_for_fiat', {sum: this.sumRub, course: this.course});
+            axios.post('/fiat_payments', {sum: this.sumRub, course: this.course});
             this.getSum();
 
             location.reload();

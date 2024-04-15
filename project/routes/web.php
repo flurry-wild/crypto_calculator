@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [\App\Http\Controllers\BuyCryptoController::class, 'index']);
-Route::get('fiat_payments/index', [\App\Http\Controllers\FiatPaymentController::class, 'index']);
+Route::get('fiat_payments', [\App\Http\Controllers\FiatPaymentController::class, 'index']);
 Route::delete('fiat_payments/{id}', [\App\Http\Controllers\FiatPaymentController::class, 'delete']);
 Route::get('fiat_payments/get_sum', [\App\Http\Controllers\BuyCryptoController::class, 'getSum']);
-Route::post('fiat_payments/buy_for_fiat', [\App\Http\Controllers\BuyCryptoController::class, 'buyForFiat']);
+Route::post('fiat_payments', [\App\Http\Controllers\FiatPaymentController::class, 'create']);
 Route::get('fiat_payments/courses', [\App\Http\Controllers\BuyCryptoController::class, 'courses']);
 Route::post('crypto_payments/buy_crypto', [\App\Http\Controllers\BuyCryptoController::class, 'buyCrypto']);
 Route::patch('crypto_payments/sell_crypto/{id}', [\App\Http\Controllers\BuyCryptoController::class, 'sellCrypto']);

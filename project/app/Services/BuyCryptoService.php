@@ -47,14 +47,6 @@ class BuyCryptoService
         }
     }
 
-    public function buyUsdt(array $params)
-    {
-        $params['currency'] = static::DEFAULT_CURRENCY;
-        $params['sum_in_currency'] = $params['sum'] / $params['course'];
-
-        FiatPayment::create($params);
-    }
-
     public function buyCrypto(array $params)
     {
         $params['sum_in_currency'] = $params['sum'] / $params['course'];
@@ -84,11 +76,6 @@ class BuyCryptoService
     public function getPurchases()
     {
         return CryptoPayment::query()->get();
-    }
-
-    public function getSumPurchases()
-    {
-        return CryptoPayment::query()->sum('sum');
     }
 
     public function getCoinPurchases(string $coin)
