@@ -34,7 +34,7 @@ class BuyCryptoService
         ];
     }
 
-    public function getCourseFromCache($coin)
+    public function getCourseFromCache(string $coin)
     {
         $course = Cache::get($coin);
 
@@ -86,12 +86,17 @@ class BuyCryptoService
         return CryptoPayment::query()->get();
     }
 
-    public function getCoinPurchases($coin)
+    public function getSumPurchases()
+    {
+        return CryptoPayment::query()->sum('sum');
+    }
+
+    public function getCoinPurchases(string $coin)
     {
         return CryptoPayment::query()->where('currency', $coin)->get();
     }
 
-    public function getCourse($coin)
+    public function getCourse(string $coin)
     {
         if ($coin === static::DEFAULT_CURRENCY) {
             $course = new FiatCourse();
@@ -134,7 +139,7 @@ class BuyCryptoService
         return round($currentSumRub / $sumRub * 100 - 100, 2);
     }
 
-    public function chart($coin)
+    public function chart(string $coin)
     {
         $coin = strtolower($coin);
         $file = file_get_contents(resource_path("chart/year_chart_$coin.json"));

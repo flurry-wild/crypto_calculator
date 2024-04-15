@@ -18164,6 +18164,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   name: "Index",
   data: function data() {
     return {
+      fiatPayments: [],
       sumRub: 10000,
       course: 0,
       allSum: 0,
@@ -18186,6 +18187,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   mounted: function mounted() {
+    this.getFiatPayments();
     this.getSum();
     this.getCoins();
     this.getCoinPurchases();
@@ -18193,6 +18195,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: {},
   methods: {
+    getFiatPayments: function getFiatPayments() {
+      var _this = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              axios__WEBPACK_IMPORTED_MODULE_0___default().get('/fiat_payments/index').then(function (res) {
+                _this.fiatPayments = res.data.data;
+              });
+            case 1:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }))();
+    },
+    deleteFiat: function deleteFiat(id) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]('/fiat_payments/' + id);
+      location.reload();
+    },
     buyForFiat: function buyForFiat() {
       axios__WEBPACK_IMPORTED_MODULE_0___default().post('/fiat_payments/buy_for_fiat', {
         sum: this.sumRub,
@@ -18202,29 +18224,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       location.reload();
     },
     getSum: function getSum() {
-      var _this = this;
+      var _this2 = this;
       axios__WEBPACK_IMPORTED_MODULE_0___default().get('/fiat_payments/get_sum').then(function (res) {
-        _this.allSum = res.data.sum;
-        _this.allSumUsdt = res.data.sumUsdt;
-        _this.currentSumUsdt = res.data.currentSumUsdt;
-        _this.currentSumRub = res.data.currentSumRub;
-        _this.profitability = res.data.profitability;
+        _this2.allSum = res.data.sum;
+        _this2.allSumUsdt = res.data.sumUsdt;
+        _this2.currentSumUsdt = res.data.currentSumUsdt;
+        _this2.currentSumRub = res.data.currentSumRub;
+        _this2.profitability = res.data.profitability;
       });
     },
     getCoinPurchases: function getCoinPurchases() {
-      var _this2 = this;
+      var _this3 = this;
       axios__WEBPACK_IMPORTED_MODULE_0___default().get('/crypto_payments/purchases/' + this.selectedCoin).then(function (res) {
-        _this2.purchases = res.data.purchases;
+        _this3.purchases = res.data.purchases;
       });
     },
     getCoins: function getCoins() {
-      var _this3 = this;
+      var _this4 = this;
       axios__WEBPACK_IMPORTED_MODULE_0___default().get('/fiat_payments/courses').then(function (res) {
-        _this3.cryptoCoins = Object.keys(res.data.data.cryptoCoins);
-        _this3.coinCourses = res.data.data.cryptoCoins;
-        _this3.selectedCoinCourse = _this3.coinCourses[_this3.selectedCoin];
-        console.log(_this3.coinCourses);
-        _this3.course = res.data.data.USDT;
+        _this4.cryptoCoins = Object.keys(res.data.data.cryptoCoins);
+        _this4.coinCourses = res.data.data.cryptoCoins;
+        _this4.selectedCoinCourse = _this4.coinCourses[_this4.selectedCoin];
+        console.log(_this4.coinCourses);
+        _this4.course = res.data.data.USDT;
       });
     },
     selectCrypto: function selectCrypto(event) {
@@ -18254,19 +18276,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       location.reload();
     },
     createLineChart: function createLineChart(coin) {
-      var _this4 = this;
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var _this5 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
         var response, responseData, xData, yData, types, canvas, context, pointColors, data, config;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              if (_this4.chart) {
-                _this4.chart.destroy();
+              if (_this5.chart) {
+                _this5.chart.destroy();
               }
-              _context.next = 3;
+              _context2.next = 3;
               return axios__WEBPACK_IMPORTED_MODULE_0___default().get('crypto_payments/chart/' + coin);
             case 3:
-              response = _context.sent;
+              response = _context2.sent;
               responseData = response.data;
               xData = responseData.times;
               yData = responseData.values;
@@ -18298,38 +18320,38 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   plugins: {
                     title: {
                       display: true,
-                      text: _this4.selectedCoin
+                      text: _this5.selectedCoin
                     }
                   }
                 }
               };
               chart_js_auto__WEBPACK_IMPORTED_MODULE_1__["default"].defaults.plugins.legend.display = false;
-              _this4.chart = new chart_js_auto__WEBPACK_IMPORTED_MODULE_1__["default"](context, config);
+              _this5.chart = new chart_js_auto__WEBPACK_IMPORTED_MODULE_1__["default"](context, config);
             case 17:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
-        }, _callee);
+        }, _callee2);
       }))();
     },
     recordTheSale: function recordTheSale() {
-      var _this5 = this;
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-          while (1) switch (_context2.prev = _context2.next) {
+      var _this6 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
             case 0:
-              _context2.next = 2;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default().patch('crypto_payments/sell_crypto/' + _this5.dialogDeal.id, {
-                sell_course: _this5.coinCourses[_this5.dialogDeal.currency],
-                sell_date: _this5.convertDate(_this5.sellDate)
+              _context3.next = 2;
+              return axios__WEBPACK_IMPORTED_MODULE_0___default().patch('crypto_payments/sell_crypto/' + _this6.dialogDeal.id, {
+                sell_course: _this6.coinCourses[_this6.dialogDeal.currency],
+                sell_date: _this6.convertDate(_this6.sellDate)
               });
             case 2:
               location.reload();
             case 3:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
-        }, _callee2);
+        }, _callee3);
       }))();
     },
     saleImpossible: function saleImpossible(data) {
@@ -18363,48 +18385,49 @@ var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNod
 var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, "USDT$ ", -1 /* HOISTED */);
 var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Зафиксировать");
 var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Инвестировано в рублях: ");
-var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Инвестировано в USDT$: ");
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "Выводы", -1 /* HOISTED */);
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Инвестировано в рублях: ");
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Инвестировано в USDT$: ");
 var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
 var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
-var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Зафиксировать покупку ");
-var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Зафиксировать покупку ");
 var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
 var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
-var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" на сумму ");
-var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" по курсу ");
-var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" на сумму ");
+var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" по курсу ");
 var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
-var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "for": "purchase_date"
 }, " Дата покупки", -1 /* HOISTED */);
-var _hoisted_21 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Зафиксировать");
-var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Зафиксировать");
 var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
-var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "Покупки криптовалюты", -1 /* HOISTED */);
-var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("canvas", null, null, -1 /* HOISTED */);
-var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Результат", -1 /* HOISTED */);
-var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
-var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Текущая сумма в USDT: ");
-var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Текущая сумма в рублях: ");
-var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
-var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Общая доходность: ");
-var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "Покупки криптовалюты", -1 /* HOISTED */);
+var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("canvas", null, null, -1 /* HOISTED */);
+var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Результат", -1 /* HOISTED */);
+var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Текущая сумма в USDT: ");
+var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Текущая сумма в рублях: ");
+var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Общая доходность: ");
 var _hoisted_33 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
-var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1 /* HOISTED */);
+var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "for": "sell_date"
 }, "Дата продажи", -1 /* HOISTED */);
-var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Зафиксировать");
+var _hoisted_36 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Зафиксировать");
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _this = this;
   var _component_InputNumber = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("InputNumber");
   var _component_Button = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Button");
+  var _component_Column = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Column");
+  var _component_DataTable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DataTable");
   var _component_SelectButton = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("SelectButton");
   var _component_Calendar = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Calendar");
   var _component_FloatLabel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("FloatLabel");
-  var _component_Column = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Column");
-  var _component_DataTable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("DataTable");
   var _component_Dialog = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Dialog");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InputNumber, {
     modelValue: $data.sumRub,
@@ -18430,7 +18453,35 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return [_hoisted_5];
     }),
     _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["onClick"])]), _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.allSum), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.allSumUsdt), 1 /* TEXT */)]), _hoisted_9, _hoisted_10, _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_12, _hoisted_13, _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_SelectButton, {
+  }, 8 /* PROPS */, ["onClick"])]), _hoisted_6, _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DataTable, {
+    value: $data.fiatPayments,
+    tableStyle: "min-width: 50rem"
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+        field: "sum",
+        header: "Cумма в рублях"
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+        field: "sum_in_currency",
+        header: "Сумма в USDT"
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, {
+        field: "course",
+        header: "Курс"
+      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, null, {
+        body: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function (_ref) {
+          var data = _ref.data;
+          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
+            label: "Удалить сделку",
+            onClick: function onClick($event) {
+              return $options.deleteFiat(data.id);
+            }
+          }, null, 8 /* PROPS */, ["onClick"])];
+        }),
+        _: 1 /* STABLE */
+      })];
+    }),
+    _: 1 /* STABLE */
+  }, 8 /* PROPS */, ["value"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.allSum), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.allSumUsdt), 1 /* TEXT */)]), _hoisted_10, _hoisted_11, _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_13, _hoisted_14, _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_SelectButton, {
     modelValue: $data.selectedCoin,
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
       return $data.selectedCoin = $event;
@@ -18438,20 +18489,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     options: $data.cryptoCoins,
     "aria-labelledby": "basic",
     onClick: $options.selectCrypto
-  }, null, 8 /* PROPS */, ["modelValue", "options", "onClick"]), _hoisted_15, _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InputNumber, {
+  }, null, 8 /* PROPS */, ["modelValue", "options", "onClick"]), _hoisted_16, _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InputNumber, {
     modelValue: $data.usdtAmount,
     "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
       return $data.usdtAmount = $event;
     }),
     prefix: "USDT$  "
-  }, null, 8 /* PROPS */, ["modelValue"]), _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InputNumber, {
+  }, null, 8 /* PROPS */, ["modelValue"]), _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_InputNumber, {
     modelValue: $data.selectedCoinCourse,
     "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
       return $data.selectedCoinCourse = $event;
     }),
     prefix: "USDT$  ",
     maxFractionDigits: 4
-  }, null, 8 /* PROPS */, ["modelValue"]), _hoisted_18, _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FloatLabel, null, {
+  }, null, 8 /* PROPS */, ["modelValue"]), _hoisted_19, _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FloatLabel, null, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Calendar, {
         modelValue: $data.purchaseDate,
@@ -18461,7 +18512,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         inputId: "purchase_date",
         dateFormat: "yy-mm-dd",
         hourFormat: "24"
-      }, null, 8 /* PROPS */, ["modelValue"]), _hoisted_20];
+      }, null, 8 /* PROPS */, ["modelValue"]), _hoisted_21];
     }),
     _: 1 /* STABLE */
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
@@ -18469,10 +18520,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($options.buyCrypto, ["prevent"])
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_21];
+      return [_hoisted_22];
     }),
     _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["onClick"])]), _hoisted_22, _hoisted_23, _hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DataTable, {
+  }, 8 /* PROPS */, ["onClick"])]), _hoisted_23, _hoisted_24, _hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DataTable, {
     value: $data.purchases,
     tableStyle: "min-width: 50rem"
   }, {
@@ -18496,8 +18547,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         field: "sell_course",
         header: "Курс продажи"
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, null, {
-        body: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function (_ref) {
-          var data = _ref.data;
+        body: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function (_ref2) {
+          var data = _ref2.data;
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
             label: "Зафиксировать продажу",
             onClick: _cache[6] || (_cache[6] = function ($event) {
@@ -18508,8 +18559,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }),
         _: 1 /* STABLE */
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Column, null, {
-        body: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function (_ref2) {
-          var data = _ref2.data;
+        body: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function (_ref3) {
+          var data = _ref3.data;
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
             label: "Удалить сделку",
             onClick: function onClick($event) {
@@ -18521,7 +18572,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       })];
     }),
     _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["value"]), _hoisted_25, _hoisted_26, _hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.currentSumUsdt), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.currentSumRub), 1 /* TEXT */)]), _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.profitability) + "%", 1 /* TEXT */)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Dialog, {
+  }, 8 /* PROPS */, ["value"]), _hoisted_26, _hoisted_27, _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.currentSumUsdt), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.currentSumRub), 1 /* TEXT */)]), _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("b", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.profitability) + "%", 1 /* TEXT */)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Dialog, {
     visible: $data.dialogVisible,
     "onUpdate:visible": _cache[9] || (_cache[9] = function ($event) {
       return $data.dialogVisible = $event;
@@ -18540,7 +18591,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }),
         prefix: "USDT$  ",
         maxFractionDigits: 4
-      }, null, 8 /* PROPS */, ["modelValue"]), _hoisted_32, _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FloatLabel, null, {
+      }, null, 8 /* PROPS */, ["modelValue"]), _hoisted_33, _hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_FloatLabel, null, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
           return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Calendar, {
             modelValue: $data.sellDate,
@@ -18550,7 +18601,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             inputId: "sell_date",
             dateFormat: "yy-mm-dd",
             hourFormat: "24"
-          }, null, 8 /* PROPS */, ["modelValue"]), _hoisted_34];
+          }, null, 8 /* PROPS */, ["modelValue"]), _hoisted_35];
         }),
         _: 1 /* STABLE */
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Button, {
@@ -18558,7 +18609,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($options.recordTheSale, ["prevent"])
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_35];
+          return [_hoisted_36];
         }),
         _: 1 /* STABLE */
       }, 8 /* PROPS */, ["onClick"])];

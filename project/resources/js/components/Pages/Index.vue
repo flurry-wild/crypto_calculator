@@ -9,6 +9,18 @@
     </div>
     <br>
 
+    <div>Выводы</div>
+    <DataTable :value="fiatPayments" tableStyle="min-width: 50rem">
+        <Column field="sum" header="Cумма в рублях"></Column>
+        <Column field="sum_in_currency" header="Сумма в USDT"></Column>
+        <Column field="course" header="Курс"></Column>
+        <Column>
+            <template #body="{ data }">
+                <Button label="Удалить сделку" @click="deleteFiat(data.id)"/>
+            </template>
+        </Column>
+    </DataTable>
+
     <div>Инвестировано в рублях: <b>{{ allSum }}</b></div>
     <div>Инвестировано в USDT$: <b>{{ allSumUsdt }}</b></div>
     <br>
@@ -86,6 +98,7 @@ export default {
 
     data() {
         return {
+            fiatPayments: [],
             sumRub: 10000,
             course: 0,
             allSum: 0,
@@ -108,6 +121,7 @@ export default {
         }
     },
     mounted() {
+        this.getFiatPayments();
         this.getSum();
         this.getCoins();
         this.getCoinPurchases();
@@ -117,6 +131,16 @@ export default {
 
     },
     methods: {
+        async getFiatPayments() {
+            axios.get('/fiat_payments/index').then(res => {
+                this.fiatPayments = res.data.data;
+            });
+        },
+        deleteFiat(id) {
+            axios.delete('/fiat_payments/'+id);
+
+            location.reload();
+        },
         buyForFiat() {
             axios.post('/fiat_payments/buy_for_fiat', {sum: this.sumRub, course: this.course});
             this.getSum();
